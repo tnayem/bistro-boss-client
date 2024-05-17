@@ -4,7 +4,7 @@ import Footer from "../../Pages/Shared/Footer/Footer";
 
 const Root = () => {
     return (
-        <div>
+        <div className="flex flex-col h-screen justify-between">
             <Navbar></Navbar>
             <Outlet></Outlet>
             <Footer></Footer>
