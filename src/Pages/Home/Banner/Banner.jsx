@@ -6,7 +6,7 @@ import img2 from '../../../assets/home/02.jpg'
 import img3 from '../../../assets/home/03.png'
 const Banner = () => {
     return (
-        <div>
+        <div className="container mx-auto">
             <Carousel>
                 <div>
                     <img src={img1} />
