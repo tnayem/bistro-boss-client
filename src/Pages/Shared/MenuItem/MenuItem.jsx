@@ -1,5 +1,5 @@
 const MenuItem = ({ item }) => {
-    const { category, image, name, price, recipe, _id } = item;
+    const { image, name, price, recipe, _id } = item;
     return (
         <div>
             <div className="flex">
