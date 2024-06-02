@@ -1,26 +1,55 @@
-import { useEffect, useRef, useState } from 'react';
-import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
+import { useContext} from 'react';
+// import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
+import { AuthContext } from '../../provider/AuthProvider';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 const Login = () => {
-    const captaRef = useRef(null)
-    const [disable,setDisable] = useState(true)
-    useEffect(()=>{
-        loadCaptchaEnginge(6);
-    },[])
+    // const captaRef = useRef(null)
+    // const [disable,setDisable] = useState(true)
+    const {signIn} = useContext(AuthContext)
+    // useEffect(()=>{
+    //     loadCaptchaEnginge(6);
+    // },[])
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location?.state?.from?.pathname || '/'
     const handleLogin = (e) => {
         e.preventDefault()
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
+        signIn(email,password)
+        .then((result)=>{
+            const user = result.user
+            console.log(user);
+            if(user.uid){
+                Swal.fire({
+                    title: "The Internet?",
+                    text: "That thing is still around?",
+                    icon: "question"
+                  });
+                  navigate(from,{replace:true})
+            }
+            
+        })
+        .catch((error)=>{
+            const errorMessage = error.message;
+            console.log(errorMessage);
+        })
 
     }
-    const handleValidateCapta = () =>{
-        const user_capta_value = captaRef.current.value;
-        if(validateCaptcha(user_capta_value)){
-            setDisable(false)
-        }
-    }
+    // const handleValidateCapta = () =>{
+    //     const user_capta_value = captaRef.current.value;
+    //     if(validateCaptcha(user_capta_value)){
+    //         setDisable(false)
+    //     }
+    // }
     return (
         <div className="container mx-auto">
+            <Helmet>
+                <title>Bistro Boss || Log in</title>
+            </Helmet>
             <div className="hero min-h-screen bg-base-200">
                 <div className="hero-content flex-col md:flex-row">
                     <div className="text-center lg:text-left md:w-[50%]">
@@ -41,17 +70,18 @@ const Login = () => {
                                 </label>
                                 <input type="password" name="password" placeholder="password" className="input input-bordered" required />
                             </div>
-                            <div className="form-control">
+                            {/* <div className="form-control">
                                 <label className="label">
                                     <LoadCanvasTemplate />
                                 </label>
                                 <input ref={captaRef} type="text" name="capta" placeholder="Type the text avobe" className="input input-bordered" required />
                                 <button onClick={handleValidateCapta} className="btn btn-outline btn-xs mt-2">Validate</button>
-                            </div>
+                            </div> */}
                             <div className="form-control mt-6">
-                                <input disabled={disable} className="btn btn-primary" type="submit" value="Login" />
+                                <input className="btn btn-primary" type="submit" value="Login" />
                             </div>
                         </form>
+                        <p className='text-center pb-3'><small>New Hear ? <Link to='/signup' className='text-blue-600'>Create an account</Link></small></p>
                     </div>
                 </div>
             </div>

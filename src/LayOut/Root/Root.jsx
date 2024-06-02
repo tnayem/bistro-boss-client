@@ -4,10 +4,10 @@ import Footer from "../../Pages/Shared/Footer/Footer";
 
 const Root = () => {
     const location = useLocation()
-    const isLogin = location.pathname.includes("login")
+    const isLogin = location.pathname.includes("login") || location.pathname.includes("signup")
     return (
         <div className="flex flex-col h-screen justify-between">
-            { isLogin || <Navbar></Navbar>}
+            {isLogin || <Navbar></Navbar>}
             <Outlet></Outlet>
             {isLogin || <Footer></Footer>}
         </div>

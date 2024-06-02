@@ -15,7 +15,6 @@ const Testimonials = () => {
             .then(res => res.json())
             .then(data => setReviews(data))
     }, [])
-    console.log(reviews);
     return (
         <div className="container mx-auto py-20">
             <SectionTItle
