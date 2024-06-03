@@ -3,9 +3,11 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const SignUp = () => {
-    const {createUser,updatedUser} = useContext(AuthContext)
+    const axiosPublic = useAxiosPublic()
+    const { createUser, updatedUser } = useContext(AuthContext)
     const navigate = useNavigate()
     const {
         register,
@@ -15,21 +17,30 @@ const SignUp = () => {
     } = useForm()
     const onSubmit = (data) => {
         console.log(data);
-        createUser(data.email,data.password)
-        .then(result=>{
-            const user = result.user;
-            console.log(user);
-            updatedUser(data.name,data.photoUrl)
-            .then(()=>{
-                reset()
-                alert("Your Profile Updated")
-                navigate('/')
+        createUser(data.email, data.password)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                updatedUser(data.name, data.photoUrl)
+                    .then(() => {
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    reset()
+                                    alert("Your Profile Updated")
+                                    navigate('/')
+                                }
+                            })
+                    })
+                    .catch(error => console.log(error))
             })
-            .catch(error=>console.log(error))
-        })
-        .catch(err=>{
-            console.error(err)
-        })
+            .catch(err => {
+                console.error(err)
+            })
     }
     return (
         <div className="container mx-auto">
@@ -60,20 +71,20 @@ const SignUp = () => {
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="email" {...register("email",{required: true})} placeholder="email" name="email" className="input input-bordered"/>
+                                <input type="email" {...register("email", { required: true })} placeholder="email" name="email" className="input input-bordered" />
                                 {errors.password?.type === "email" && <span>Password is required</span>}
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="password" {...register("password",{ 
+                                <input type="password" {...register("password", {
                                     required: true,
                                     minLength: 6,
-                                    maxLength:20,
-                                    pattern:/(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z!#$%&? "])[a-zA-Z0-9!#$%&?]/
+                                    maxLength: 20,
+                                    pattern: /(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z!#$%&? "])[a-zA-Z0-9!#$%&?]/
 
-                                    })} placeholder="password" name="password" className="input input-bordered" required />
+                                })} placeholder="password" name="password" className="input input-bordered" required />
                                 {errors.password?.type === "required" && <span>Password is required</span>}
                                 {errors.password?.type === "minLength" && <span>Password must be 6 charecter</span>}
                                 {errors.password?.type === "maxLength" && <span>Password must be less then 20 charecter</span>}
