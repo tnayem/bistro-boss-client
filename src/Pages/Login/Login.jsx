@@ -4,6 +4,7 @@ import { AuthContext } from '../../provider/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import SocialLogin from '../SocialLogin/SocialLogin';
 const Login = () => {
     // const captaRef = useRef(null)
     // const [disable,setDisable] = useState(true)
@@ -45,6 +46,9 @@ const Login = () => {
     //         setDisable(false)
     //     }
     // }
+
+
+    
     return (
         <div className="container mx-auto">
             <Helmet>
@@ -81,7 +85,8 @@ const Login = () => {
                                 <input className="btn btn-primary" type="submit" value="Login" />
                             </div>
                         </form>
-                        <p className='text-center pb-3'><small>New Hear ? <Link to='/signup' className='text-blue-600'>Create an account</Link></small></p>
+                        <p className='text-center'><small>New Hear ? <Link to='/signup' className='text-blue-600'>Create an account</Link></small></p>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>

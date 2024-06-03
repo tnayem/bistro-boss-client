@@ -1,5 +1,5 @@
 import { FaCartPlus, FaList } from "react-icons/fa6";
-import { FaCalendar, FaHamburger, FaHome } from "react-icons/fa";
+import { FaCalendar, FaEnvelope, FaHamburger, FaHome } from "react-icons/fa";
 import { IoStarSharp } from "react-icons/io5";
 import { NavLink, Outlet } from "react-router-dom";
 import useCart from "../../hooks/useCart";
@@ -20,6 +20,7 @@ const Dashboard = () => {
                         <div className="divider"></div>
                         <li><NavLink to='/'><FaHome /> Home</NavLink></li>
                         <li><NavLink to='/order/salad'><FaHamburger /> Menu</NavLink></li>
+                        <li><NavLink to='/order/cotact'><FaEnvelope /> Contact</NavLink></li>
                     </ul>
                 </div>
                 {/* Dashboard Content */}
